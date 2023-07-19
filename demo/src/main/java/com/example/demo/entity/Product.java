@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -27,9 +29,6 @@ public class Product {
     @Column(name = "product_category")
     private String productCategory;
 
-    @Column(name = "product_type")
-    private String productType;
-
     @Column(name = "product_price")
     private Double productPrice;
 
@@ -45,5 +44,10 @@ public class Product {
     @Column(name = "product_manufactured_location")
     private String location;
 
+    @Column(name = "product_Quantity")
+    private Integer Quantity;
+
+//    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
+//    private List<OrderedProduct> orderedProducts;
 
 }

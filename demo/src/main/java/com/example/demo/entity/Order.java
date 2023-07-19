@@ -8,6 +8,7 @@ import lombok.Setter;
 
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -22,11 +23,26 @@ public class Order {
     @Column(name = "order_id")
     private Integer id;
 
-    @Column(name = "product_id")
-    private Integer productId;
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "oderDataTable",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "products_id")
+    )
+    private List<Product> orderedProducts;
+
+//    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+//    private List<OrderedProduct> orderedProducts;
 
     @Column(name = "order_quantity")
-    private Integer quantity;
+    private Double quantity;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(name = "total_price")
+    private Double totalPrice;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "order_date")

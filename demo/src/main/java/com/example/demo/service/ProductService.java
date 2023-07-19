@@ -45,9 +45,6 @@ public class ProductService {
         if (productManufacturedBy!=null){
             product.setManufacturedBy(productManufacturedBy);
         }
-        if (productType!=null){
-            product.setProductType(productType);
-        }
         if (productManufacturedLocation != null){
             product.setLocation(productManufacturedLocation);
         }
@@ -68,5 +65,9 @@ public class ProductService {
             jsonArrayOfProducts.put(jsonObject);
         }
         return jsonArrayOfProducts;
+    }
+
+    public Product findProductByName(String productName) {
+        return productRepository.findByProductName(productName);
     }
 }

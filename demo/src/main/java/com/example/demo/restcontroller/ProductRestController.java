@@ -36,12 +36,20 @@ public class ProductRestController {
         Product newProduct;
         try {
             newProduct = setProductData(jsonObject);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error creating product: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception exception) {
+            return new ResponseEntity<>("Error creating product: " + exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
         if (newProduct == null) {
             return new ResponseEntity<>("Error creating product", HttpStatus.BAD_REQUEST);
         }
+        Product existingProduct=productService.findProductByName(newProduct.getProductName());
+        if(existingProduct !=null){
+            Integer availableProducts=existingProduct.getQuantity();
+            existingProduct.setQuantity(availableProducts+1);
+            productService.saveProduct(existingProduct);
+            return new ResponseEntity<>("product added",HttpStatus.OK);
+        }
+        newProduct.setQuantity(1);
         Product product;
         try {
             product = productService.saveProduct(newProduct);
@@ -52,20 +60,14 @@ public class ProductRestController {
         return new ResponseEntity<>("product added with id = " + product.getId(), HttpStatus.CREATED);
     }
 
-    private Product setProductData(JSONObject jsonObject) {
+    private Product setProductData(JSONObject jsonObject) throws Exception{
         Product product = new Product();
-        try {
             product.setProductName(jsonObject.getString("productName"));
             product.setProductCategory(jsonObject.getString("productCategory"));
-            product.setProductType(jsonObject.getString("productType"));
             product.setProductPrice(jsonObject.getDouble("productPrice"));
             product.setManufacturedBy(jsonObject.getString("productManufacturedBy"));
             product.setLocation((jsonObject.getString("productManufacturedLocation")));
             product.setCreatedAt(Timestamp.from(Instant.now()));
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return null;
-        }
         return product;
     }
 
