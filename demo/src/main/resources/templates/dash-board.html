@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <style>
+        .left-box{
+        width:330px;
+        height:860px;
+        border:2px solid tomato;
+        }
+        .right-box{
+        width:1556px;
+        height:860px;
+        border:2px solid tomato;
+        }
+        .card{
+        width:200px;
+        height:70px;
+        margin:10px
+        padding:15px;
+        background-color:#FEFEA2;
+        border-radius:5px;
+        }
+
+
+
+
+
+    </style>
+
+</head>
+<body style="background-color:rgb(248,248,255);">
+<h1 align="center">Dash Board</h1>
+<div style="display:flex; justify-content:right;">
+    <form th:action="@{/logout}" method="get">
+        <button style="width:97px; height:25px; position:relative; top:-6px; left:-11px; background-color:red;"
+                type="submit">Logout
+        </button>
+    </form>
+</div>
+<div style="display:flex">
+    <div class="left-box" style="background-color:rgb(248,248,255)">
+        <div th:if="${isUserAdmin} == True" style="padding:4px;">
+            <form th:action="@{/get-all-users}" method="get">
+                <button type="submit" style="width:309px; height:78px; color:green; font-size:48px">Users</button>
+            </form>
+        </div>
+        <div style="padding:4px;">
+            <form th:action="@{/purchase}" method="get">
+                <button type="submit" style="width:309px; height:78px; color:green; font-size:48px">Purchase</button>
+            </form>
+        </div>
+        <div style="padding:4px;">
+            <form th:action="@{/sales}" method="get">
+                <button type="submit" style="width:309px; height:78px; color:green; font-size:48px">Sales</button>
+            </form>
+        </div>
+        <div style="padding:4px;">
+            <form th:action="@{/producers}" method="get">
+                <button type="submit" style="width:309px; height:78px; color:green; font-size:48px">Products</button>
+            </form>
+        </div>
+    </div>
+    <div class="right-box" style="background-color:rgb(240,255,255);">
+        <div th:if="${isUserAdmin} == True" style="display:flex; justify-content:right;">
+            <form th:action="@{/create-user}" method="get">
+                <button style="width:97px; height:25px; background-color:green; position:relative; top:5px; left:-9px;"
+                        type="submit">create user
+                </button>
+            </form>
+        </div>
+        <div class="card">
+            <p style="text-align:center;">Number Of Users</p>
+            <p th:text="${numberOfUsers}" style="text-align:center; position:relative; top:8px;"></p>
+        </div>
+        <div class="card">
+            <p style="text-align:center; position:relative; top:8px">Number Of products</p>
+            <p th:text="${numberOdProducts}" style="text-align:center;"></p>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
