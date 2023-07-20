@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -51,12 +52,12 @@ public class UserController {
         User user = userService.findUserByEmail(principal.getName());
         Boolean adminFlag = user.getRole().isAdmin();
         model.addAttribute("isUserAdmin", adminFlag);
-        List<User> allUsers=userService.findAllUsers();
-        Integer numberOfUsers=allUsers.size();
-        model.addAttribute("numberOfUsers",numberOfUsers);
-        List<Product> allProducts=productService.findAllProducts();
-        Integer numberOfProducts=allProducts.size();
-        model.addAttribute("numberOfProducts",numberOfProducts);
+        List<User> allUsers = userService.findAllUsers();
+        Integer numberOfUsers = allUsers.size();
+        model.addAttribute("numberOfUsers", numberOfUsers);
+        List<Product> allProducts = productService.findAllProducts();
+        Integer numberOfProducts = allProducts.size();
+        model.addAttribute("numberOfProducts", numberOfProducts);
         return "dash-board";
     }
 
@@ -68,13 +69,34 @@ public class UserController {
         User user = userService.findUserByEmail(principal.getName());
         Boolean adminFlag = user.getRole().isAdmin();
         model.addAttribute("isUserAdmin", adminFlag);
-        List<Product> allProducts=productService.findAllProducts();
-        model.addAttribute("allProducts",allProducts);
+        List<Product> allProducts = productService.findAllProducts();
+        model.addAttribute("allProducts", allProducts);
         return "all-users-dash-board";
     }
+
     @GetMapping(value = "/access-denied")
     public String accessDenied() {
         return "access-denied";
+    }
+
+    @GetMapping(value = "/change-active-status/{userId}")
+    public String deActivateTheUser(@PathVariable Integer userId) {
+
+        try {
+            User user = userService.findUserById(userId);
+            if(user.getActiveStatus()){
+                user.setActiveStatus(false);
+            }else {
+                user.setActiveStatus(true);
+            }
+            userService.saveTheUser(user);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/get-all-users";
+
     }
 
 }

@@ -23,19 +23,17 @@ public class Order {
     @Column(name = "order_id")
     private Integer id;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "oderDataTable",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "products_id")
-    )
-    private List<Product> orderedProducts;
+//    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "oderDataTable",
+//            joinColumns = @JoinColumn(name = "order_id"),
+//            inverseJoinColumns = @JoinColumn(name = "products_id")
+//    )
+//    private List<Product> orderedProducts;
 
 //    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
 //    private List<OrderedProduct> orderedProducts;
 
-    @Column(name = "order_quantity")
-    private Double quantity;
 
     @OneToOne
     @JoinColumn(name = "user_id")

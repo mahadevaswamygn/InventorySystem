@@ -28,18 +28,24 @@ public class UserService {
         newUser.setName(user.getName());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setCreatedAt(Timestamp.from(Instant.now()));
+//        waiting for brother
 //       ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"));
 //       user.setCreatedAt(now);
 
-        newUser.setActive(false);
+        newUser.setActiveStatus(false);
 
+//        By initial state  set the role as by ourself
 //        Role role = roleService.saveRole();
 //        newUser.setRole(role);
 
         Role role=roleService.findById(2);
         newUser.setRole(role);
-
-        userRepository.save(newUser);
+        try {
+            userRepository.save(newUser);
+        }catch (Exception exception){
+            exception.printStackTrace();
+            System.out.println(exception.getMessage());
+        }
     }
 
     public User findUserByEmail(String email) {
@@ -49,5 +55,13 @@ public class UserService {
     public List<User> findAllUsers() {
         List<User> allUsers=userRepository.findAll();
         return allUsers;
+    }
+
+    public User findUserById(Integer userId) {
+        return userRepository.findById(userId).get();
+    }
+
+    public void saveTheUser(User user) {
+        userRepository.save(user);
     }
 }

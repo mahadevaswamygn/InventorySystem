@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Setter
 @Getter
+@Data
 @Table(name = "t_user")
 public class User {
     @Id
@@ -35,7 +36,7 @@ public class User {
     private Timestamp updatedAt;
 
     @Column(name = "user_active")
-    private boolean active;
+    private Boolean activeStatus;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

@@ -6,6 +6,8 @@ import com.example.demo.reposotory.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderService {
 
@@ -22,5 +24,9 @@ public class OrderService {
 
     public Order findOrderById(Integer orderId) {
         return orderRepository.findById(orderId).get();
+    }
+
+    public List<Order> findAllOrders() {
+        return orderRepository.findAll();
     }
 }

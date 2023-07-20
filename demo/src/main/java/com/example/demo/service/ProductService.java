@@ -70,4 +70,8 @@ public class ProductService {
     public Product findProductByName(String productName) {
         return productRepository.findByProductName(productName);
     }
+
+    public Product getProductById(Integer productId) {
+        return productRepository.findById(productId).get();
+    }
 }
