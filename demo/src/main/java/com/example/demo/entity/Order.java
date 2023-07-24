@@ -8,7 +8,6 @@ import lombok.Setter;
 
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -39,14 +38,16 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "total_price")
-    private Double totalPrice;
+//    @Column(name = "total_price")
+//    private Double totalPrice;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "order_date")
     private Date orderDate;
 
     @Column(name = "order_invoiceNumber")
-    private String setInvoiceNumber;
-}
+    private String invoiceNumber;
 
+    @Column(name = "ordered_quantity")
+    private Double orderedQuantity;
+}

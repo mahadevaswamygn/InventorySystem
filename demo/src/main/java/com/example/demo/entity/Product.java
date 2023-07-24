@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -33,7 +32,7 @@ public class Product {
     private Double productPrice;
 
     @Column(name = "product_manufacturedBy")
-    private String manufacturedBy;
+    private String productManufacturedBy;
 
     @Column(name = "product_createdAt")
     private Timestamp createdAt;
@@ -41,13 +40,12 @@ public class Product {
     @Column(name = "product_updatedAt")
     private Timestamp updatedAt;
 
-    @Column(name = "product_manufactured_location")
-    private String location;
+//    @Column(name = "product_manufactured_location")
+//    private String location;
 
     @Column(name = "product_Quantity")
-    private Integer Quantity;
+    private Integer quantity;
 
 //    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
 //    private List<OrderedProduct> orderedProducts;
-
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -27,13 +28,17 @@ public class OrderedProductController {
     @Autowired
     OrderService orderService;
 
-    @GetMapping(value = "/show-order-details/{orderId}")
-    public String getOrderedProductDetailsByOrderId(@PathVariable Integer orderId,
-                                                    Model model,
-                                                    Principal principal) {
-        User user = userService.findUserByEmail(principal.getName());
+    @GetMapping("/show-order-details/{orderId}")
+    public String getOrderedProductDetailsByOrderId(@PathVariable Integer orderId, Model model, Principal principal) {
+        User user=new User();
+        try {
+            user = userService.findUserByEmail(principal.getName());
+        }catch (Exception exception){
+//            LOGGER.error("error at finding user");
+        }
         Boolean adminFlag = user.getRole().isAdmin();
         model.addAttribute("isUserAdmin", adminFlag);
+
         List<OrderedProduct> allOrderedProduct = orderedProductService.getAllOrderedProduct();
         List<OrderedProduct> orderedProducts = new ArrayList<>();
         Double grandTotal = 0.0;
@@ -41,13 +46,13 @@ public class OrderedProductController {
             if (orderedProduct.getOrder().getId() == orderId) {
                 orderedProducts.add(orderedProduct);
                 grandTotal += orderedProduct.getTotalPrice();
-
             }
         }
         model.addAttribute("orderedProducts", orderedProducts);
         model.addAttribute("grandTotal", grandTotal);
-        String userName=orderService.findOrderById(orderId).getUser().getName();
-        model.addAttribute("userName",userName);
-        return "order-details";
+        String userName = orderService.findOrderById(orderId).getUser().getUserName();
+        model.addAttribute("userName", userName);
+
+        return "order-details-content";
     }
 }

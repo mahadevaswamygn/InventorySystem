@@ -43,5 +43,4 @@ public class OrderedProduct {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "order_date")
     private Date orderDate;
-
 }

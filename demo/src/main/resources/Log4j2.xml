@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="LogConsole" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d - %c [%M] -(%p) %m %n</Pattern>
+            </PatternLayout>
+        </Console>
+        <File name="LogToFile" fileName="Downloads/inventoryandrow/inven/InventorySystem/demo/myLogs.log">
+            <PatternLayout>
+                <Pattern>%d - %c [%M] -(%p) %m %n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="LogConsole"/>
+            <AppenderRef ref="LogToFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

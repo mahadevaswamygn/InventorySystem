@@ -65,8 +65,7 @@ public class ProductRestController {
             product.setProductName(jsonObject.getString("productName"));
             product.setProductCategory(jsonObject.getString("productCategory"));
             product.setProductPrice(jsonObject.getDouble("productPrice"));
-            product.setManufacturedBy(jsonObject.getString("productManufacturedBy"));
-            product.setLocation((jsonObject.getString("productManufacturedLocation")));
+            product.setProductManufacturedBy(jsonObject.getString("productManufacturedBy"));
             product.setCreatedAt(Timestamp.from(Instant.now()));
         return product;
     }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>User Registration Form</title>
-    <style>
+  <title>Update User Form</title>
+  <style>
         body {
             display: flex;
             justify-content: center;
@@ -76,34 +76,31 @@
 </head>
 <body>
 <div class="container">
-    <div class="form-box">
-        <h2>User Registration</h2>
-        <form th:action="@{/register}" th:object="${userDto}" method="post">
-            <label for="name">Name:</label>
-            <input type="text" id="name" th:field="*{userName}" required>
+  <div class="form-box">
+    <h2>Update User </h2>
+    <form th:action="@{/update-user}" th:object="${user}" method="post">
+      <input type="hidden" name="userId" th:value="${userId}">
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" th:field="*{userEmail}" required>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" th:field="*{userName}" required>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" th:field="*{userPassword}" required>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="name" th:field="*{userEmail}" required>
 
-            <label for="userConfirmPassword">Confirm Password:</label>
-            <input type="password" id="userConfirmPassword" th:field="*{userConfirmPassword}" required>
+<!--      <label for="password">Password:</label>-->
+<!--      <input type="password" id="password" th:field="*{userPassword}" required>-->
 
-            <label for="userRoleId">User Role:</label>
-            <select id="userRoleId" th:field="*{userRoleId}" required>
-                <option value="1">Admin</option>
-                <option value="2">User</option>
-            </select>
-            <div style="color:red;" th:text="${emailPresent}"></div>
-            <br>
-            <div style="color:red;" th:text="${passwordMissMatch}"></div>
-            <br>
+<!--      <label for="userConfirmPassword">Confirm Password:</label>-->
+<!--      <input type="password" id="userConfirmPassword" th:field="*{userConfirmPassword}" required>-->
 
-            <input type="submit" value="Register">
-        </form>
-    </div>
+      <label for="userRoleId">User Role:</label>
+      <select id="userRoleId" name="userRoleId" th:field="*{userRoleId}" >
+        <option value="1">Admin</option>
+        <option value="2">User</option>
+      </select>
+      <input type="submit" value="Update">
+    </form>
+  </div>
 </div>
 </body>
 </html>

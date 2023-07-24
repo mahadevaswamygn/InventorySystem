@@ -24,13 +24,13 @@ public class CustomUserDetails implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User validUser = userRepository.findByEmail(email);
+        User validUser = userRepository.findByUserEmail(email);
         if (validUser == null) {
             throw new UsernameNotFoundException("User doesn't exist");
         }
         return new org.springframework.security.core.userdetails.User(
-                validUser.getEmail(),
-                validUser.getPassword(),
+                validUser.getUserEmail(),
+                validUser.getUserPassword(),
                 Collections.singleton(new SimpleGrantedAuthority(validUser.getRole().getRoleName()))
         );
     }

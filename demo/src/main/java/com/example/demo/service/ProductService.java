@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.ProductDto;
 import com.example.demo.entity.Product;
 import com.example.demo.reposotory.ProductRepository;
 import org.json.JSONArray;
@@ -43,10 +44,7 @@ public class ProductService {
             product.setProductCategory(productCategory);
         }
         if (productManufacturedBy!=null){
-            product.setManufacturedBy(productManufacturedBy);
-        }
-        if (productManufacturedLocation != null){
-            product.setLocation(productManufacturedLocation);
+            product.setProductManufacturedBy(productManufacturedBy);
         }
         product.setUpdatedAt(Timestamp.from(Instant.now()));
 
@@ -73,5 +71,26 @@ public class ProductService {
 
     public Product getProductById(Integer productId) {
         return productRepository.findById(productId).get();
+    }
+
+    public void saveTheProduct(Product product) throws Exception {
+        try {
+            product.setCreatedAt(Timestamp.from(Instant.now()));
+            productRepository.save(product);
+        }catch (Exception exception){
+            throw new Exception();
+        }
+
+
+
+    }
+
+    public Product setProduct(ProductDto productDto) {
+        Product product=new Product();
+        product.setProductName(productDto.getProductName());
+        product.setProductCategory(productDto.getProductCategory());
+        product.setProductPrice(productDto.getProductPrice());
+        product.setProductManufacturedBy(productDto.getProductManufacturedBy());
+        return product;
     }
 }

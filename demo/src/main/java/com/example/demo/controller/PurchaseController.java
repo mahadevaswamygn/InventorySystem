@@ -23,13 +23,18 @@ public class PurchaseController {
     UserService userService;
 
     @GetMapping(value = "/purchase")
-    public String allOrders(Model model, Principal principal){
-        User user = userService.findUserByEmail(principal.getName());
+    public String allOrders(Model model, Principal principal) {
+        User user=new User();
+        try {
+            user = userService.findUserByEmail(principal.getName());
+        }catch (Exception exception){
+//            LOGGER.error("error at finding user");
+        }
         Boolean adminFlag = user.getRole().isAdmin();
         model.addAttribute("isUserAdmin", adminFlag);
-        List<Order> allOrders=orderService.findAllOrders();
-        model.addAttribute("allOrders",allOrders);
-        model.addAttribute("userName",user.getName());
+        List<Order> allOrders = orderService.findAllOrders();
+        model.addAttribute("allOrders", allOrders);
+        model.addAttribute("userName", user.getUserName());
         return "all-orders";
     }
 }
