@@ -6,8 +6,6 @@ import com.example.demo.entity.Order;
 import com.example.demo.entity.OrderedProduct;
 import com.example.demo.reposotory.OrderRepository;
 import com.example.demo.reposotory.OrderedProductRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

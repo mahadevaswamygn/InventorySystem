@@ -130,10 +130,10 @@ public class UserController {
         }
         Boolean adminFlag = user.getRole().isAdmin();
         model.addAttribute("isUserAdmin", adminFlag);
-        List<Product> allProducts=new ArrayList<>();
+        List<Product> allProducts = new ArrayList<>();
         try {
-         allProducts=productService.findAllProducts();
-        }catch (Exception exception){
+            allProducts = productService.findAllProducts();
+        } catch (Exception exception) {
             LOGGER.error("error at finding all Products");
         }
         model.addAttribute("allProducts", allProducts);
