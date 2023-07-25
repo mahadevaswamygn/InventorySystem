@@ -90,4 +90,14 @@ public class ProductService {
         product.setProductManufacturedBy(productDto.getProductManufacturedBy());
         return product;
     }
+
+//    public void updateProductQuantity(Product existingProduct, Integer saleProductQuantity) throws Exception {
+//        try {
+//            Integer existingProductQuantity = existingProduct.getQuantity();
+//            existingProduct.setQuantity(existingProductQuantity - saleProductQuantity);
+//            productRepository.save(existingProduct);
+//        }catch (Exception exception){
+//            throw new Exception();
+//        }
+//    }
 }

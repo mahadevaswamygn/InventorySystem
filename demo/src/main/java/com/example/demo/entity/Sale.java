@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Setter
 @Getter
@@ -16,15 +18,18 @@ public class Sale {
     @Column(name = "sale_id")
     private Integer id;
 
-    @Column(name = "product_name")
-    private String productName;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "sale",cascade = CascadeType.ALL)
+    private List<Product> products;
+
 
     @Column(name = "product_quantity")
     private Integer quantity;
 
-    @Column(name = "sale_price")
-    private Integer price;
 
     @Column(name = "total_price")
-    private Integer totalPrice;
+    private Double totalPrice;
 }

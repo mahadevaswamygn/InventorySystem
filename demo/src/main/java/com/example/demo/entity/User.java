@@ -19,7 +19,7 @@ public class User {
     @Column(name = "user_id")
     private Integer id;
 
-    @Column(name = "user_email")
+    @Column(name = "user_email", unique = true)
     private String userEmail;
 
     @Column(name = "user_name")

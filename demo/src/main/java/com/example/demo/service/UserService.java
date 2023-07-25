@@ -39,7 +39,7 @@ public class UserService {
 
 //        By initial state  set the role as by ourself
 //        Role role = roleService.saveRole();
-//        newUser.setRole(role);
+//        user.setRole(role);
 
         Role role=roleService.findById(userDto.getUserRoleId());
         user.setRole(role);

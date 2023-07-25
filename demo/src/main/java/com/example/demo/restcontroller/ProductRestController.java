@@ -43,13 +43,13 @@ public class ProductRestController {
             return new ResponseEntity<>("Error creating product", HttpStatus.BAD_REQUEST);
         }
         Product existingProduct=productService.findProductByName(newProduct.getProductName());
-        if(existingProduct !=null){
-            Integer availableProducts=existingProduct.getQuantity();
-            existingProduct.setQuantity(availableProducts+1);
-            productService.saveProduct(existingProduct);
-            return new ResponseEntity<>("product added",HttpStatus.OK);
-        }
-        newProduct.setQuantity(1);
+//        if(existingProduct !=null){
+//            Integer availableProducts=existingProduct.getQuantity();
+//            existingProduct.setQuantity(availableProducts+1);
+//            productService.saveProduct(existingProduct);
+//            return new ResponseEntity<>("product added",HttpStatus.OK);
+//        }
+//        newProduct.setQuantity(1);
         Product product;
         try {
             product = productService.saveProduct(newProduct);

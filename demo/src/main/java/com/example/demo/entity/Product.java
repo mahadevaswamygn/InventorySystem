@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -40,12 +42,31 @@ public class Product {
     @Column(name = "product_updatedAt")
     private Timestamp updatedAt;
 
-//    @Column(name = "product_manufactured_location")
-//    private String location;
+//    @Column(name = "product_Quantity")
+//    private Integer quantity;
 
-    @Column(name = "product_Quantity")
-    private Integer quantity;
 
-//    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
-//    private List<OrderedProduct> orderedProducts;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderedProduct> orderedProducts = new ArrayList<>();
+
+    @JsonIgnore
+    @ManyToOne(targetEntity = Sale.class)
+    @JoinColumn(name = "sale_id")
+    private Sale sale;
+
+//    @JsonIgnore
+//    @ManyToOne(targetEntity = Inventory.class)
+//    @JoinColumn(name = "inventory_id")
+//    private Inventory inventory;
+
+
+    public void addOrderedProduct(OrderedProduct orderedProduct) {
+        orderedProducts.add(orderedProduct);
+        orderedProduct.setProduct(this);
+    }
+
+    public void removeOrderedProduct(OrderedProduct orderedProduct) {
+        orderedProducts.remove(orderedProduct);
+        orderedProduct.setProduct(null);
+    }
 }

@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -22,24 +23,9 @@ public class Order {
     @Column(name = "order_id")
     private Integer id;
 
-//    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "oderDataTable",
-//            joinColumns = @JoinColumn(name = "order_id"),
-//            inverseJoinColumns = @JoinColumn(name = "products_id")
-//    )
-//    private List<Product> orderedProducts;
-
-//    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
-//    private List<OrderedProduct> orderedProducts;
-
-
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-//    @Column(name = "total_price")
-//    private Double totalPrice;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "order_date")
@@ -48,6 +34,16 @@ public class Order {
     @Column(name = "order_invoiceNumber")
     private String invoiceNumber;
 
-    @Column(name = "ordered_quantity")
-    private Double orderedQuantity;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderedProduct> orderedProducts = new ArrayList<>();
+
+    public void addOrderedProduct(OrderedProduct orderedProduct) {
+        orderedProducts.add(orderedProduct);
+        orderedProduct.setOrder(this);
+    }
+
+    public void removeOrderedProduct(OrderedProduct orderedProduct) {
+        orderedProducts.remove(orderedProduct);
+        orderedProduct.setOrder(null);
+    }
 }

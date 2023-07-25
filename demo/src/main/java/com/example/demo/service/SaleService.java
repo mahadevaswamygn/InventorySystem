@@ -20,4 +20,8 @@ public class SaleService {
         List<Sale> allSales=saleRepository.findAll();
         return allSales;
     }
+
+    public void saveTheSale(Sale sale) {
+        saleRepository.save(sale);
+    }
 }
