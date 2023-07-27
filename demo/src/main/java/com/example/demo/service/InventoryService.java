@@ -90,7 +90,7 @@ public class InventoryService {
 
     public void updateInventoryProductsSale(List<SoldProduct> soldProducts) throws InventoryNotExistException, ProductQuantityNotExistException {
         for (SoldProduct soldProduct : soldProducts) {
-            Inventory existingInventory = findExistingInventoryOfTheProduct(soldProduct.getProduct().getId());
+            Inventory existingInventory = findExistingInventoryOfTheProduct(soldProduct.getSoldProduct().getId());
             if (existingInventory != null) {
                 if (soldProduct.getQuantity() <= existingInventory.getAvailableProductQuantity()) {
                     Inventory inventory = new Inventory();

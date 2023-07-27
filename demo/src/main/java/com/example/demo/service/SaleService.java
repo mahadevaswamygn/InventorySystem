@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SaleService {
@@ -46,6 +47,8 @@ public class SaleService {
         Sale sale = new Sale();
         sale.setUser(user);
         sale.setSaleDate(Timestamp.from(Instant.now()));
+        sale.setInvoiceNumber(generateInvoiceNumber());
+        Double totalPrice=0.0;
 
         for (SaleProductDto saleProductDto : saleRequestDto.getSaleProducts()) {
             SoldProduct soldProduct = new SoldProduct();
@@ -56,11 +59,20 @@ public class SaleService {
             soldProduct.setPricePerProduct(product.getProductPrice());
             soldProduct.setTotalPrice(product.getProductPrice() * saleProductDto.getProductQuantity());
 
+            totalPrice+= soldProduct.getTotalPrice();
+
             sale.addSoldProduct(soldProduct);
         }
+        sale.setTotalPrice(totalPrice);
+        sale.setProductQuantity(saleRequestDto.getSaleProducts().size());
         List<SoldProduct> soldProducts = sale.getSoldProducts();
         inventoryService.updateInventoryProductsSale(soldProducts);
         Sale newSale = saleRepository.save(sale);
         return newSale;
+    }
+
+    private String generateInvoiceNumber() {
+        return UUID.randomUUID().toString().replace("-", "").toUpperCase();
+
     }
 }

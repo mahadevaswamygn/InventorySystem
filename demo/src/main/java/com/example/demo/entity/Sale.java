@@ -28,6 +28,15 @@ public class Sale {
     @Column(name = "sale_date")
     private Date saleDate;
 
+    @Column(name = "sale_invoiceNumber")
+    private String invoiceNumber;
+
+    @Column(name = "total_price")
+    private Double totalPrice;
+
+    @Column(name = "product_quantity")
+    private Integer productQuantity;
+
 
     @OneToMany(mappedBy = "sale",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<SoldProduct> soldProducts=new ArrayList<>();

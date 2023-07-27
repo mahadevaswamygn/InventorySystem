@@ -111,7 +111,7 @@ public class SaleRestController {
         try {
             Sale sale=saleService.saleProducts(saleRequestDto,user);
             String massage="sale successful";
-            SaleProductResponse saleProductResponse=new SaleProductResponse(massage,HttpStatus.OK.toString());
+            SaleProductResponse saleProductResponse=new SaleProductResponse(massage,"ok");
             return new ResponseEntity<>(saleProductResponse,HttpStatus.OK);
 
         }

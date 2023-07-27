@@ -64,13 +64,13 @@ public class OrderService {
 
             order.addOrderedProduct(orderedProduct);
         }
-        Order createdOrder= orderRepository.save(order);
-        List<OrderedProduct> orderedProducts=createdOrder.getOrderedProducts();
+        List<OrderedProduct> orderedProducts=order.getOrderedProducts();
 //        for (OrderedProduct orderedProduct:orderedProducts){
 //            System.out.println(orderedProduct.getProduct().getProductName());
 //        }
 
         inventoryService.updateInventory(orderedProducts);
+        Order createdOrder= orderRepository.save(order);
         return createdOrder;
     }
 

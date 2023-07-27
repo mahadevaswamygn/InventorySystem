@@ -49,13 +49,13 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderedProduct> orderedProducts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "soldProduct",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SoldProduct> soldProducts=new ArrayList<>();
 
-    @JsonIgnore
-    @ManyToOne(targetEntity = Sale.class)
-    @JoinColumn(name = "sale_id")
-    private Sale sale;
+//    @JsonIgnore
+//    @ManyToOne(targetEntity = Sale.class)
+//    @JoinColumn(name = "sale_id")
+//    private Sale sale;
 
     public void addOrderedProduct(OrderedProduct orderedProduct) {
         orderedProducts.add(orderedProduct);

@@ -66,14 +66,8 @@ public class ProductService {
         }
     }
 
-    public JSONArray getAllProducts() {
-        JSONArray jsonArrayOfProducts=new JSONArray();
-        List<Product> allProducts=productRepository.findAll();
-        for (Product product:allProducts){
-            JSONObject jsonObject= new JSONObject(product);
-            jsonArrayOfProducts.put(jsonObject);
-        }
-        return jsonArrayOfProducts;
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
     public Product findProductByName(String productName) {

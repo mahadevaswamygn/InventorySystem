@@ -36,14 +36,14 @@ public class SoldProduct {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product product;
+    private Product soldProduct;
 
     @ManyToOne
     @JoinColumn(name = "sale_id")
     private Sale sale;
 
-    public void setProduct(Product product){
-        this.product=product;
+    public void setProduct(Product soldProduct){
+        this.soldProduct=soldProduct;
     }
     public void setSale(Sale sale){
         this.sale=sale;
