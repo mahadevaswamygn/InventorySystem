@@ -1,7 +1,14 @@
 package com.example.demo.restcontroller;
 
+import com.example.demo.costomExceptions.ProductNotFoundException;
+import com.example.demo.dto.ProductDto;
+import com.example.demo.dto.ProductRequest;
 import com.example.demo.entity.Product;
+import com.example.demo.responseces.ProductResponse;
 import com.example.demo.service.ProductService;
+import jakarta.validation.Valid;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +22,16 @@ import java.time.Instant;
 @RestController
 public class ProductRestController {
 
+    private final Logger LOGGER = LogManager.getLogger("ProductRestControllerLogs");
+
     @Autowired
     ProductService productService;
+
+    @GetMapping(value = "/getProduct/{productId}")
+    public ResponseEntity<Product> getProductById(@PathVariable Integer productId) throws ProductNotFoundException {
+        Product product=productService.findProductById(productId);
+        return new ResponseEntity<>(product,HttpStatus.OK);
+    }
 
     @GetMapping(value = "/getAllProducts")
     public ResponseEntity<String> getAllProducts() {
@@ -24,85 +39,59 @@ public class ProductRestController {
         try {
             allProducts = productService.getAllProducts();
         } catch (Exception exception) {
-            exception.printStackTrace();
-            return new ResponseEntity<>("Error fetching all products", HttpStatus.INTERNAL_SERVER_ERROR);
+            LOGGER.error("error at finding all products" + exception.getMessage());
+            return new ResponseEntity<>("error at finding all products", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(allProducts.toString(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/add-product")
-    public ResponseEntity<String> addProduct(@RequestBody String productData) {    // reference : who add the product and authority of the user
-        JSONObject jsonObject = new JSONObject(productData);
-        Product newProduct;
+    public ResponseEntity<ProductResponse> addProduct(@RequestBody @Valid ProductRequest productRequest) {
         try {
-            newProduct = setProductData(jsonObject);
+            productService.saveProducts(productRequest);
+            ProductResponse productResponse=new ProductResponse();
+            productResponse.setMassage("Product saved");
+            productResponse.setStatusCode(HttpStatus.OK.toString());
+            return new ResponseEntity<>(productResponse,HttpStatus.OK);
         } catch (Exception exception) {
-            return new ResponseEntity<>("Error creating product: " + exception.getMessage(), HttpStatus.BAD_REQUEST);
+            LOGGER.error("error at saving the Products" + exception.getMessage());
         }
-        if (newProduct == null) {
-            return new ResponseEntity<>("Error creating product", HttpStatus.BAD_REQUEST);
-        }
-        Product existingProduct=productService.findProductByName(newProduct.getProductName());
-//        if(existingProduct !=null){
-//            Integer availableProducts=existingProduct.getQuantity();
-//            existingProduct.setQuantity(availableProducts+1);
-//            productService.saveProduct(existingProduct);
-//            return new ResponseEntity<>("product added",HttpStatus.OK);
-//        }
-//        newProduct.setQuantity(1);
-        Product product;
-        try {
-            product = productService.saveProduct(newProduct);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return new ResponseEntity<>("Error saving the product", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>("product added with id = " + product.getId(), HttpStatus.CREATED);
+        ProductResponse productResponse=new ProductResponse();
+        productResponse.setMassage("error at saving Product");
+        productResponse.setStatusCode(HttpStatus.BAD_REQUEST.toString());
+        return new ResponseEntity<>(productResponse,HttpStatus.BAD_REQUEST);
     }
 
-    private Product setProductData(JSONObject jsonObject) throws Exception{
-        Product product = new Product();
-            product.setProductName(jsonObject.getString("productName"));
-            product.setProductCategory(jsonObject.getString("productCategory"));
-            product.setProductPrice(jsonObject.getDouble("productPrice"));
-            product.setProductManufacturedBy(jsonObject.getString("productManufacturedBy"));
-            product.setCreatedAt(Timestamp.from(Instant.now()));
-        return product;
-    }
 
     @DeleteMapping(value = "/delete/{productId}")
-    public ResponseEntity<String> deleteProduct(@PathVariable Integer productId) {
-        try {
-            Product product = productService.findProductById(productId);
-            if (product == null) {
-                return new ResponseEntity<>("Product with this id does not exist", HttpStatus.NOT_FOUND);
-            }
-            productService.deleteProductById(productId);
-            return new ResponseEntity<>("Product is deleted", HttpStatus.OK);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return new ResponseEntity<>("Error deleting the product", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<String> deleteProduct(@PathVariable Integer productId) throws ProductNotFoundException {
+
+        Product product = productService.findProductById(productId);
+        productService.deleteProductById(product.getId());
+        return new ResponseEntity<>("Product is deleted", HttpStatus.OK);
     }
 
     @PutMapping(value = "/updateProduct/{productId}")
-    public ResponseEntity<String> updateProduct(@PathVariable Integer productId,
-                                                @RequestParam(value = "productName", required = false) String productName,
-                                                @RequestParam(value = "productPrice", required = false) Double productPrice,
-                                                @RequestParam(value = "productCategory", required = false) String productCategory,
-                                                @RequestParam(value = "productManufacturedBy", required = false) String productManufacturedBy,
-                                                @RequestParam(value = "productType", required = false) String productType,
-                                                @RequestParam(value = "productManufacturedLocation", required = false) String productManufacturedLocation) {
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Integer productId,
+                                                         @RequestParam(value = "productName", required = false) String productName,
+                                                         @RequestParam(value = "productPrice", required = false) Double productPrice,
+                                                         @RequestParam(value = "productCategory", required = false) String productCategory,
+                                                         @RequestParam(value = "productManufacturedBy", required = false) String productManufacturedBy,
+                                                         @RequestParam(value = "productType", required = false) String productType,
+                                                         @RequestParam(value = "productManufacturedLocation", required = false) String productManufacturedLocation) throws ProductNotFoundException {
+        Product product = productService.findProductById(productId);
         try {
-            Product product = productService.findProductById(productId);
-            if (product == null) {
-                return new ResponseEntity<>("Product with this id does not exist", HttpStatus.NOT_FOUND);
-            }
             productService.updateProduct(product, productName, productPrice, productCategory, productManufacturedBy, productType, productManufacturedLocation);
-            return new ResponseEntity<>("Updated", HttpStatus.OK);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return new ResponseEntity<>("Error updating the product", HttpStatus.INTERNAL_SERVER_ERROR);
+            ProductResponse productResponse=new ProductResponse();
+            productResponse.setMassage("Product updated");
+            productResponse.setStatusCode(HttpStatus.OK.toString());
+            return new ResponseEntity<>(productResponse,HttpStatus.OK);
+        }catch (Exception exception){
+            LOGGER.error("error at updating product"+exception.getMessage());
+            ProductResponse productResponse=new ProductResponse();
+            productResponse.setMassage("error at updating Product");
+            productResponse.setStatusCode(HttpStatus.BAD_REQUEST.toString());
+            return new ResponseEntity<>(productResponse,HttpStatus.BAD_REQUEST);
         }
     }
 }

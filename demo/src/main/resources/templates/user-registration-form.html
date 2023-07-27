@@ -81,15 +81,19 @@
         <form th:action="@{/register}" th:object="${userDto}" method="post">
             <label for="name">Name:</label>
             <input type="text" id="name" th:field="*{userName}" required>
+            <div style="color: red" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></div>
 
             <label for="email">Email:</label>
             <input type="email" id="email" th:field="*{userEmail}" required>
+            <div style="color: red" th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}"></div>
 
             <label for="password">Password:</label>
             <input type="password" id="password" th:field="*{userPassword}" required>
+            <div style="color: red" th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}"></div>
 
             <label for="userConfirmPassword">Confirm Password:</label>
             <input type="password" id="userConfirmPassword" th:field="*{userConfirmPassword}" required>
+            <div style="color: red" th:if="${#fields.hasErrors('userConfirmPassword')}" th:errors="*{userConfirmPassword}"></div>
 
             <label for="userRoleId">User Role:</label>
             <select id="userRoleId" th:field="*{userRoleId}" required>

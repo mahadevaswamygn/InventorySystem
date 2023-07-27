@@ -83,22 +83,13 @@
 
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" th:field="*{userName}" required>
+      <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></div>
 
       <label for="email">Email:</label>
       <input type="email" id="email" name="name" th:field="*{userEmail}" required>
-
-<!--      <label for="password">Password:</label>-->
-<!--      <input type="password" id="password" th:field="*{userPassword}" required>-->
-
-<!--      <label for="userConfirmPassword">Confirm Password:</label>-->
-<!--      <input type="password" id="userConfirmPassword" th:field="*{userConfirmPassword}" required>-->
-
-      <label for="userRoleId">User Role:</label>
-      <select id="userRoleId" name="userRoleId" th:field="*{userRoleId}" >
-        <option value="1">Admin</option>
-        <option value="2">User</option>
-      </select>
+      <div th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}" class="error"></div>
       <input type="submit" value="Update">
+
     </form>
   </div>
 </div>

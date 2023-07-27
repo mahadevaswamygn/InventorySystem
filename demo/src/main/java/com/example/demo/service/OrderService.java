@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 
+import com.example.demo.costomExceptions.ProductNotFoundException;
 import com.example.demo.dto.OrderRequestDto;
 import com.example.demo.dto.OrderedProductDto;
 import com.example.demo.entity.Order;
@@ -44,18 +45,18 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public Order createOrder(OrderRequestDto orderRequest, User user) {
+    public Order createOrder(OrderRequestDto orderRequest, User user) throws ProductNotFoundException {
         Order order = new Order();
 
         order.setUser(user);
         order.setOrderDate(new Date());
         order.setInvoiceNumber(generateInvoiceNumber());
 
-        for (OrderedProductDto orderedProductDTO : orderRequest.getOrderedProducts()) {
+        for (OrderedProductDto orderedProductDto : orderRequest.getOrderedProducts()) {
             OrderedProduct orderedProduct = new OrderedProduct();
-            Product product = productService.findProductById(orderedProductDTO.getProductId());
+            Product product = productService.findProductById(orderedProductDto.getProductId().intValue());
             orderedProduct.setProduct(product);
-            orderedProduct.setNoOfQuantity(orderedProductDTO.getNoOfQuantity());
+            orderedProduct.setNoOfQuantity(orderedProductDto.getQuantity());
             orderedProduct.setOrderDate(new Date());
 
             orderedProduct.setPricePerProduct(product.getProductPrice());
@@ -65,9 +66,9 @@ public class OrderService {
         }
         Order createdOrder= orderRepository.save(order);
         List<OrderedProduct> orderedProducts=createdOrder.getOrderedProducts();
-        for (OrderedProduct orderedProduct:orderedProducts){
-            System.out.println(orderedProduct.getProduct().getProductName());
-        }
+//        for (OrderedProduct orderedProduct:orderedProducts){
+//            System.out.println(orderedProduct.getProduct().getProductName());
+//        }
 
         inventoryService.updateInventory(orderedProducts);
         return createdOrder;

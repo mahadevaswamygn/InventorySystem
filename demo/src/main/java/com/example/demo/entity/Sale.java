@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,14 +24,22 @@ public class Sale {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "sale",cascade = CascadeType.ALL)
-    private List<Product> products;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "sale_date")
+    private Date saleDate;
 
 
-    @Column(name = "product_quantity")
-    private Integer quantity;
+    @OneToMany(mappedBy = "sale",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<SoldProduct> soldProducts=new ArrayList<>();
 
 
-    @Column(name = "total_price")
-    private Double totalPrice;
+    public void addSoldProduct(SoldProduct soldProduct){
+        soldProducts.add(soldProduct);
+        soldProduct.setSale(this);
+    }
+
+    public void removeSoldProduct(SoldProduct soldProduct) {
+        soldProducts.remove(soldProduct);
+        soldProduct.setSale(null);
+    }
 }

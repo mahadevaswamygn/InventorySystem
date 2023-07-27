@@ -18,6 +18,8 @@ import java.util.List;
 @Controller
 public class SaleController {
 
+    // waiting for brother
+
     @Autowired
     SaleService saleService;
 

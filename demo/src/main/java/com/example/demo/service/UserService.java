@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.costomExceptions.UserNotFoundException;
 import com.example.demo.dto.UserDto;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
@@ -54,7 +55,7 @@ public class UserService {
         try {
             return userRepository.findByUserEmail(email);
         }catch (Exception exception){
-            throw new Exception();
+            throw new UserNotFoundException("user not found");
         }
     }
 

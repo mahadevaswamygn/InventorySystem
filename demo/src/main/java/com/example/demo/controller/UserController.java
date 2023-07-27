@@ -7,22 +7,25 @@ import com.example.demo.service.ProductService;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.UserService;
 
+import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+//import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class UserController {
-    private final Logger LOGGER = LogManager.getLogger(UserController.class);
+    private final Logger LOGGER = LogManager.getLogger("userControllerLogs");
 
     @Autowired
     UserService userService;
@@ -35,7 +38,7 @@ public class UserController {
 
     @GetMapping(value = "/login")
     public String login() {
-        LOGGER.error("error at login page just for confirmation");
+//        LOGGER.error("looger to user controller just for confirmation");
         return "login";
     }
 
@@ -47,10 +50,14 @@ public class UserController {
         return "user-registration-form";
     }
 
-    @PostMapping(value = "/register")
-    @PreAuthorize("@userService.findUserByEmail(principal.getUsername()) != null && @userService.findUserByEmail(principal.getUsername()).getRole() != null && @userService.findUserByEmail(principal.getUsername()).getRole().isAdmin() == true")
-    public String user_register(@ModelAttribute UserDto userDto, Principal principal, Model model) {
+    @PostMapping("/register")
+    public String user_register(@Valid @ModelAttribute UserDto userDto, BindingResult bindingResult, Model model) {
         LOGGER.trace("user Registration start");
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("validationErrors", bindingResult.getAllErrors());
+            return "user-registration-form";
+        }
 
         try {
             User existingUser = userService.findUserByEmail(userDto.getUserEmail());
@@ -70,7 +77,7 @@ public class UserController {
                 LOGGER.error("error at saving the user" + exception.getMessage());
             }
         } else {
-            model.addAttribute("passwordMissMatch", "Passwords are not same, please provide same password");
+            model.addAttribute("passwordMissMatch", "Passwords are not the same, please provide the same password");
             return "user-registration-form";
         }
         return "login";
@@ -160,6 +167,10 @@ public class UserController {
     public String updateUser(@PathVariable Integer userId, Model model, Principal principal) {
         try {
             User user = userService.findUserById(userId);
+            if (user == null) {
+                return "update-user-form";
+            }
+
             UserDto userDto = new UserDto();
             userDto.setUserName(user.getUserName());
             userDto.setUserEmail(user.getUserEmail());
@@ -167,27 +178,31 @@ public class UserController {
             model.addAttribute("user", userDto);
             model.addAttribute("userId", userId);
         } catch (Exception exception) {
-            LOGGER.error("error at finding the user " + exception.getMessage());
+            LOGGER.error("Error at finding the user: " + exception.getMessage());
+            return "error";
         }
         return "update-user-form";
     }
 
-    @PostMapping(value = "/update-user")
-    public String updateUserData(@ModelAttribute("user") UserDto userDto,
-                                 @RequestParam("userId") Integer userId) {
+    @PostMapping("/update-user")
+    public String updateUserData(@ModelAttribute("user") @Valid UserDto userDto,
+                                 BindingResult bindingResult,
+                                 @RequestParam("userId") Integer userId,
+                                 Model model) {
         LOGGER.trace("Entering the Updating the User Method");
-        User user = new User();
-        try {
-            user = userService.findUserById(userId);
-        } catch (Exception exception) {
-            LOGGER.error("error at finding user " + exception.getMessage());
+
+        if (bindingResult.hasErrors()) {
+            return "update-user-form";
         }
         try {
+            User user = userService.findUserById(userId);
             userService.updateTheUser(user, userDto);
             return "redirect:/get-all-users";
         } catch (Exception exception) {
-            LOGGER.error("error at updating the User " + exception.getMessage());
+            LOGGER.error("Error at updating the User: " + exception.getMessage());
             return "error";
         }
     }
+
+
 }

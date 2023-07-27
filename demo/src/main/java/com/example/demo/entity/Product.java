@@ -49,16 +49,13 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderedProduct> orderedProducts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SoldProduct> soldProducts=new ArrayList<>();
+
     @JsonIgnore
     @ManyToOne(targetEntity = Sale.class)
     @JoinColumn(name = "sale_id")
     private Sale sale;
-
-//    @JsonIgnore
-//    @ManyToOne(targetEntity = Inventory.class)
-//    @JoinColumn(name = "inventory_id")
-//    private Inventory inventory;
-
 
     public void addOrderedProduct(OrderedProduct orderedProduct) {
         orderedProducts.add(orderedProduct);
@@ -68,5 +65,14 @@ public class Product {
     public void removeOrderedProduct(OrderedProduct orderedProduct) {
         orderedProducts.remove(orderedProduct);
         orderedProduct.setProduct(null);
+    }
+    public void addSoldProduct(SoldProduct soldProduct){
+        soldProducts.add(soldProduct);
+        soldProduct.setProduct(this);
+    }
+
+    public void removeSoldProduct(SoldProduct soldProduct){
+        soldProducts.remove(soldProduct);
+        soldProduct.setProduct(null);
     }
 }

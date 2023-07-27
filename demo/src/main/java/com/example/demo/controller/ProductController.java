@@ -5,18 +5,25 @@ import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
 import com.example.demo.service.ProductService;
 import com.example.demo.service.UserService;
+import jakarta.validation.Valid;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+//import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
 @Controller
 public class ProductController {
+
+    private final Logger LOGGER= LogManager.getLogger("ProductControllerLogs");
 
     @Autowired
     ProductService productService;
@@ -24,20 +31,34 @@ public class ProductController {
     @Autowired
     UserService userService;
 
-    @GetMapping(value = "/get-all-products")
+    @GetMapping("/get-all-products")
     public String getAllProducts(Model model, Principal principal) {
-        User user=new User();
+//        LOGGER.error("looger to product controller just for confirmation");
+        User user = null;
         try {
             user = userService.findUserByEmail(principal.getName());
-        }catch (Exception exception){
-//            LOGGER.error("error at finding user");
+            if (user == null || user.getRole() == null) {
+               model.addAttribute("errorMessage","user not found");
+                return "error";
+            }
+        } catch (Exception exception) {
+            LOGGER.error("Error at finding user: " + exception.getMessage());
+            model.addAttribute("errorMessage",exception.getMessage());
+            return "error";
         }
         Boolean adminFlag = user.getRole().isAdmin();
         model.addAttribute("isUserAdmin", adminFlag);
-        List<Product> allProducts = productService.findAllProducts();
-        model.addAttribute("allProducts", allProducts);
+        try {
+            List<Product> allProducts = productService.findAllProducts();
+            model.addAttribute("allProducts", allProducts);
+        } catch (Exception exception) {
+            LOGGER.error("Error at finding all products: " + exception.getMessage());
+            model.addAttribute("errorMessage",exception.getMessage());
+            return "error";
+        }
         return "all-products";
     }
+
 
     @GetMapping(value = "/create-product")
     public String createProduct(Model model,
@@ -47,30 +68,25 @@ public class ProductController {
         return "product-registration-form";
     }
 
-    @PostMapping(value = "/create-product")
-    public String addProduct(@ModelAttribute ProductDto productDto,
-                             Principal principal) {
+    @PostMapping("/create-product")
+    public String addProduct(@ModelAttribute @Valid ProductDto productDto,
+                             BindingResult bindingResult,
+                             Principal principal,
+                             Model model) {
 
-        // waiting for brother
-
-//        try {
-//            Product existingProduct=productService.findProductByName(productDto.getProductName());
-//            if (existingProduct != null){
-//                Integer availableProducts=existingProduct.getQuantity();
-//                existingProduct.setQuantity(availableProducts+productDto.getQuantity());
-//                productService.saveProduct(existingProduct);
-//                return "redirect:/get-all-products";
-//            }
-//        }catch (Exception exception){
-//            System.out.println(exception.getMessage());
-//        }
+        if (bindingResult.hasErrors()) {
+            return "product-registration-form";
+        }
 
         try {
             Product product = productService.setProduct(productDto);
             productService.saveTheProduct(product);
         } catch (Exception exception) {
-
+            LOGGER.error("Error at adding product: " + exception.getMessage());
+            model.addAttribute("errorMessage","error at creating product");
+            return "error";
         }
         return "redirect:/get-all-products";
     }
+
 }
