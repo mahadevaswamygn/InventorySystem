@@ -112,6 +112,18 @@
                 <TimeBasedTriggeringPolicy/>
             </Policies>
         </RollingFile>
+        <RollingFile name="SaleControllerAppender"
+                     fileName="${LOG_PATH}/SaleController.log"
+                     filePattern="${LOG_PATH}/SaleController-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level : %msg%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
     </Appenders>
 
     <Loggers>
@@ -144,6 +156,9 @@
         </Logger>
         <Logger name="SaleRestControllerLogs" level="debug" additivity="false">
             <AppenderRef ref="SaleRestControllerAppender" />
+        </Logger>
+        <Logger name="SaleControllerLogs" level="debug" additivity="false">
+            <AppenderRef ref="SaleControllerAppender" />
         </Logger>
 
     </Loggers>

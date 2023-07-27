@@ -23,7 +23,7 @@ public class SaleController {
     // waiting for brother
 
 
-    private final Logger LOGGER= LogManager.getLogger(SaleController.class); // i want to make separate log file for this
+    private final Logger LOGGER= LogManager.getLogger("SaleControllerLogs"); // i want to make separate log file for this
 
     @Autowired
     SaleService saleService;
