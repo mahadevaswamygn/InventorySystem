@@ -13,4 +13,7 @@ public class ProductInventoryDto {
         this.productName = productName;
         this.latestInventory = latestInventory;
     }
+
+    public ProductInventoryDto() {
+    }
 }
