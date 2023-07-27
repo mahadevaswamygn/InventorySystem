@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Update User Form</title>
-  <style>
+    <title>Update User Form</title>
+    <style>
         body {
             display: flex;
             justify-content: center;
@@ -72,26 +72,24 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+
     </style>
 </head>
 <body>
 <div class="container">
-  <div class="form-box">
-    <h2>Update User </h2>
-    <form th:action="@{/update-user}" th:object="${user}" method="post">
-      <input type="hidden" name="userId" th:value="${userId}">
-
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" th:field="*{userName}" required>
-      <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></div>
-
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="name" th:field="*{userEmail}" required>
-      <div th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}" class="error"></div>
-      <input type="submit" value="Update">
-
-    </form>
-  </div>
+    <div class="form-box">
+        <h2>Update User </h2>
+        <form th:action="@{/update-user}" th:object="${user}" method="post">
+            <input type="hidden" name="userId" th:value="${userId}">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" th:field="*{userName}" required>
+            <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="name" th:field="*{userEmail}" required>
+            <div th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}" class="error"></div>
+            <input type="submit" value="Update">
+        </form>
+    </div>
 </div>
 </body>
 </html>

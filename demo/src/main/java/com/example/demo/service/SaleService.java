@@ -49,6 +49,7 @@ public class SaleService {
         sale.setSaleDate(Timestamp.from(Instant.now()));
         sale.setInvoiceNumber(generateInvoiceNumber());
         Double totalPrice=0.0;
+        Integer totalProducts=0;
 
         for (SaleProductDto saleProductDto : saleRequestDto.getSaleProducts()) {
             SoldProduct soldProduct = new SoldProduct();
@@ -60,13 +61,16 @@ public class SaleService {
             soldProduct.setTotalPrice(product.getProductPrice() * saleProductDto.getProductQuantity());
 
             totalPrice+= soldProduct.getTotalPrice();
+            totalProducts+=saleProductDto.getProductQuantity().intValue();
 
             sale.addSoldProduct(soldProduct);
         }
         sale.setTotalPrice(totalPrice);
+        // confusion here
+        // sale.setProductQuantity(totalProducts);
         sale.setProductQuantity(saleRequestDto.getSaleProducts().size());
         List<SoldProduct> soldProducts = sale.getSoldProducts();
-        inventoryService.updateInventoryProductsSale(soldProducts);
+        inventoryService.updateInventoryProductsSale(soldProducts); // T
         Sale newSale = saleRepository.save(sale);
         return newSale;
     }
