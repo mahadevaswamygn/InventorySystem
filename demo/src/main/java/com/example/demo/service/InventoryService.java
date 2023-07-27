@@ -35,8 +35,7 @@ public class InventoryService {
     InventoryRepository inventoryRepository;
 
     private final Logger LOGGER = LogManager.getLogger("InventoryServiceLogs");
-
-
+    
     public void updateInventory(List<OrderedProduct> orderedProducts) {
 
         for (OrderedProduct orderedProduct : orderedProducts) {
@@ -64,7 +63,7 @@ public class InventoryService {
         }
         return null;
     }
-    
+
     public void updateProductSale(Inventory existingInventory, SaleProductDto saleProductDto) {
         Inventory newInventory = new Inventory(existingInventory.getProduct(),existingInventory.getAvailableProductQuantity() -saleProductDto.getProductQuantity(),0.0,saleProductDto.getProductQuantity().doubleValue(),new Date());
         inventoryRepository.save(newInventory);
