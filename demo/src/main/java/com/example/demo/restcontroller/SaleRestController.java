@@ -3,15 +3,9 @@ package com.example.demo.restcontroller;
 
 import com.example.demo.costomExceptions.ProductNotFoundException;
 import com.example.demo.costomExceptions.ProductQuantityNotExistException;
-import com.example.demo.dto.CreateOrderResponse;
-import com.example.demo.dto.ProductDto;
-import com.example.demo.dto.SaleProductDto;
 import com.example.demo.dto.SaleRequestDto;
-import com.example.demo.entity.Inventory;
-import com.example.demo.entity.Product;
 import com.example.demo.entity.Sale;
 import com.example.demo.entity.User;
-import com.example.demo.responseces.ProductResponse;
 import com.example.demo.responseces.SaleProductResponse;
 import com.example.demo.service.InventoryService;
 import com.example.demo.service.ProductService;
@@ -25,12 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @RestController
 public class SaleRestController {
@@ -110,13 +102,12 @@ public class SaleRestController {
 //        }
         try {
             Sale sale=saleService.saleProducts(saleRequestDto,user);
-            String massage="sale successful";
-            SaleProductResponse saleProductResponse=new SaleProductResponse(massage,"ok");
-            return new ResponseEntity<>(saleProductResponse,HttpStatus.OK);
 
+            SaleProductResponse saleProductResponse=new SaleProductResponse("sale Success","ok");
+            return new ResponseEntity<>(saleProductResponse,HttpStatus.OK);
         }
         catch (ProductNotFoundException exception){
-            SaleProductResponse saleProductResponse=new SaleProductResponse(exception.getMessage(),HttpStatus.BAD_REQUEST.toString());
+            SaleProductResponse saleProductResponse=new SaleProductResponse(exception.getMessage(),"error");
             return new ResponseEntity<>(saleProductResponse,HttpStatus.BAD_REQUEST);
         }
         catch (ProductQuantityNotExistException exception){
@@ -127,7 +118,6 @@ public class SaleRestController {
             LOGGER.error("error at saving sale"+exception.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new SaleProductResponse("Error at selling Products  . "+exception.getMessage(),HttpStatus.BAD_REQUEST.toString()));
-
         }
     }
 }

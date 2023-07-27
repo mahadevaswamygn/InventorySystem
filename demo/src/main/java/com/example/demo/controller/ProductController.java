@@ -33,10 +33,10 @@ public class ProductController {
 
     @GetMapping("/get-all-products")
     public String getAllProducts(Model model, Principal principal) {
-//        LOGGER.error("looger to product controller just for confirmation");
+//        LOGGER.error("logger to product controller just for confirmation");
         User user = null;
         try {
-            user = userService.findUserByEmail(principal.getName());
+            user = userService.findUserByEmail(principal.getName());// its throwing UserNotFountException if the user not exist
             if (user == null || user.getRole() == null) {
                model.addAttribute("errorMessage","user not found");
                 return "error";
@@ -59,7 +59,6 @@ public class ProductController {
         return "all-products";
     }
 
-
     @GetMapping(value = "/create-product")
     public String createProduct(Model model,
                                 Principal principal) {
@@ -77,12 +76,11 @@ public class ProductController {
         if (bindingResult.hasErrors()) {
             return "product-registration-form";
         }
-
         try {
             Product product = productService.setProduct(productDto);
             productService.saveTheProduct(product);
         } catch (Exception exception) {
-            LOGGER.error("Error at adding product: " + exception.getMessage());
+            LOGGER.error("Error at adding product : " + exception.getMessage());
             model.addAttribute("errorMessage","error at creating product");
             return "error";
         }

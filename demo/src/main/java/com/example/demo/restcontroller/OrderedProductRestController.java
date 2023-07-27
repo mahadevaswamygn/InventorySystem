@@ -57,8 +57,7 @@ public class OrderedProductRestController {
                     .body(new CreateOrderResponse("Error creating order. " + exception.getMessage()));
         }
     }
-
-
+}
 //    @GetMapping(value = "/get-graph")
 //    public ResponseEntity<String> getGraph() {
 //        Map<Integer, Double> allMonthDetails;
@@ -70,4 +69,4 @@ public class OrderedProductRestController {
 //        }
 //        return new ResponseEntity<>("No ordered yet", HttpStatus.BAD_REQUEST);
 //    }
-}
+//}

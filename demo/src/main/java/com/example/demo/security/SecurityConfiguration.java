@@ -21,7 +21,6 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-
     @Autowired
     CustomUserDetails customUserDetails;
 
@@ -29,7 +28,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(configure ->
                         configure
-                                .requestMatchers("/login","/add-product","/create-user","/register","/")
+                                .requestMatchers("/login", "/add-product", "/create-user", "/register", "/")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -44,11 +43,10 @@ public class SecurityConfiguration {
                         logout
                                 .permitAll()
                 ).csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exception->
+                .exceptionHandling(exception ->
                         exception
                                 .accessDeniedPage("/access-denied"));
         ;
-
         return httpSecurity.build();
     }
 }

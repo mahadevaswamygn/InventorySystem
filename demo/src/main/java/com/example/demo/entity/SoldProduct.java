@@ -42,10 +42,11 @@ public class SoldProduct {
     @JoinColumn(name = "sale_id")
     private Sale sale;
 
-    public void setProduct(Product soldProduct){
-        this.soldProduct=soldProduct;
+    public void setProduct(Product soldProduct) {
+        this.soldProduct = soldProduct;
     }
-    public void setSale(Sale sale){
-        this.sale=sale;
+
+    public void setSale(Sale sale) {
+        this.sale = sale;
     }
 }

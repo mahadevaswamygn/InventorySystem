@@ -38,7 +38,6 @@ public class UserController {
 
     @GetMapping(value = "/login")
     public String login() {
-//        LOGGER.error("looger to user controller just for confirmation");
         return "login";
     }
 
@@ -53,12 +52,10 @@ public class UserController {
     @PostMapping("/register")
     public String user_register(@Valid @ModelAttribute UserDto userDto, BindingResult bindingResult, Model model) {
         LOGGER.trace("user Registration start");
-
         if (bindingResult.hasErrors()) {
             model.addAttribute("validationErrors", bindingResult.getAllErrors());
             return "user-registration-form";
         }
-
         try {
             User existingUser = userService.findUserByEmail(userDto.getUserEmail());
             if (existingUser != null) {
@@ -203,6 +200,4 @@ public class UserController {
             return "error";
         }
     }
-
-
 }

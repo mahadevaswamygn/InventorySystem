@@ -10,6 +10,7 @@ import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
 import com.example.demo.reposotory.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,28 +48,15 @@ public class OrderService {
 
     public Order createOrder(OrderRequestDto orderRequest, User user) throws ProductNotFoundException {
         Order order = new Order();
-
         order.setUser(user);
         order.setOrderDate(new Date());
         order.setInvoiceNumber(generateInvoiceNumber());
-
         for (OrderedProductDto orderedProductDto : orderRequest.getOrderedProducts()) {
-            OrderedProduct orderedProduct = new OrderedProduct();
             Product product = productService.findProductById(orderedProductDto.getProductId().intValue());
-            orderedProduct.setProduct(product);
-            orderedProduct.setNoOfQuantity(orderedProductDto.getQuantity());
-            orderedProduct.setOrderDate(new Date());
-
-            orderedProduct.setPricePerProduct(product.getProductPrice());
-            orderedProduct.setTotalPrice(product.getProductPrice() * orderedProduct.getNoOfQuantity());
-
+            OrderedProduct orderedProduct = new OrderedProduct(orderedProductDto.getQuantity(),product.getProductPrice(),product.getProductPrice() * orderedProductDto.getQuantity(),new Date(),product);
             order.addOrderedProduct(orderedProduct);
         }
         List<OrderedProduct> orderedProducts=order.getOrderedProducts();
-//        for (OrderedProduct orderedProduct:orderedProducts){
-//            System.out.println(orderedProduct.getProduct().getProductName());
-//        }
-
         inventoryService.updateInventory(orderedProducts);
         Order createdOrder= orderRepository.save(order);
         return createdOrder;

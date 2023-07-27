@@ -39,4 +39,12 @@ public class Inventory {
     @Column(name = "inventory_date")
     private Date inventoryDate;
 
+    public Inventory(Product product, Double availableProductQuantity, Double purchaseQuantity, Double salesQuantity, Date inventoryDate) {
+        this.product = product;
+        this.availableProductQuantity = availableProductQuantity;
+        this.purchaseQuantity = purchaseQuantity;
+        this.salesQuantity = salesQuantity;
+        this.inventoryDate = inventoryDate;
+    }
+
 }

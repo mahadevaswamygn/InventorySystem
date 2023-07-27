@@ -49,4 +49,12 @@ public class OrderedProduct {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    public OrderedProduct(Double noOfQuantity, Double pricePerProduct, Double totalPrice, Date orderDate,Product product) {
+        this.noOfQuantity = noOfQuantity;
+        this.pricePerProduct = pricePerProduct;
+        this.totalPrice = totalPrice;
+        this.orderDate = orderDate;
+        this.product = product;
+    }
 }

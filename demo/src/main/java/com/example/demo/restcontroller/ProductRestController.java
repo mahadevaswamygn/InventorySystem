@@ -27,8 +27,6 @@ public class ProductRestController {
     @Autowired
     ProductService productService;
 
-    @Autowired
-    InventoryService inventoryService;
 
     @GetMapping(value = "/getProduct/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable Integer productId) throws ProductNotFoundException {
@@ -52,19 +50,14 @@ public class ProductRestController {
     public ResponseEntity<ProductResponse> addProduct(@RequestBody @Valid ProductRequest productRequest) {
         try {
             productService.saveProducts(productRequest);
-            ProductResponse productResponse = new ProductResponse();
-            productResponse.setMassage("Product saved");
-            productResponse.setStatusCode(HttpStatus.OK.toString());
+            ProductResponse productResponse = new ProductResponse("Product saved", "error");
             return new ResponseEntity<>(productResponse, HttpStatus.OK);
         } catch (Exception exception) {
             LOGGER.error("error at saving the Products" + exception.getMessage());
         }
-        ProductResponse productResponse = new ProductResponse();
-        productResponse.setMassage("error at saving Product");
-        productResponse.setStatusCode(HttpStatus.BAD_REQUEST.toString());
+        ProductResponse productResponse = new ProductResponse("error at saving Product", "error");
         return new ResponseEntity<>(productResponse, HttpStatus.BAD_REQUEST);
     }
-
 
     @DeleteMapping(value = "/delete/{productId}")
     public ResponseEntity<String> deleteProduct(@PathVariable Integer productId) throws ProductNotFoundException {
@@ -85,33 +78,24 @@ public class ProductRestController {
         Product product = productService.findProductById(productId);
         try {
             productService.updateProduct(product, productName, productPrice, productCategory, productManufacturedBy, productType, productManufacturedLocation);
-            ProductResponse productResponse = new ProductResponse();
-            productResponse.setMassage("Product updated");
-            productResponse.setStatusCode(HttpStatus.OK.toString());
+            ProductResponse productResponse = new ProductResponse("Product updated", "error");
             return new ResponseEntity<>(productResponse, HttpStatus.OK);
         } catch (Exception exception) {
             LOGGER.error("error at updating product" + exception.getMessage());
-            ProductResponse productResponse = new ProductResponse();
-            productResponse.setMassage("error at updating Product");
-            productResponse.setStatusCode(HttpStatus.BAD_REQUEST.toString());
+            ProductResponse productResponse = new ProductResponse("error at updating Product", "error");
             return new ResponseEntity<>(productResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping(value = "/getLatestInventoryForEachProduct")
     public ResponseEntity<List<ProductInventoryDto>> getLatestInventoryForEachProducts() {
-        List<Product> allProducts = productService.getAllProducts();
-        List<ProductInventoryDto> latestProductInventoryForEachProductDto = new ArrayList<>();
-        for (Product product : allProducts) {
-            Inventory inventory = inventoryService.findExistingInventoryOfTheProduct(product.getId());
-            if (inventory != null) {
-                ProductInventoryDto productInventoryDto = new ProductInventoryDto(product.getId(), product.getProductName(), inventory.getAvailableProductQuantity());
-                latestProductInventoryForEachProductDto.add(productInventoryDto);
-            } else {
-                ProductInventoryDto productInventoryDto = new ProductInventoryDto(product.getId(), product.getProductName(), 0.0);
-                latestProductInventoryForEachProductDto.add(productInventoryDto);
-            }
-        }
-        return new ResponseEntity<>(latestProductInventoryForEachProductDto, HttpStatus.OK);
+        List<ProductInventoryDto> latestProductInventoryForEachProduct = productService.getLatestInventoryOfAllProducts();
+        return new ResponseEntity<>(latestProductInventoryForEachProduct, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getInventory")
+    public ResponseEntity<List<ProductInventoryDto>> getLatestInventory() throws ProductNotFoundException {
+        List<ProductInventoryDto> all=productService.getLatestInventory();
+        return new ResponseEntity<>(all,HttpStatus.OK);
     }
 }

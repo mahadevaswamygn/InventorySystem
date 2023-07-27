@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,20 +41,11 @@ public class Product {
     @Column(name = "product_updatedAt")
     private Timestamp updatedAt;
 
-//    @Column(name = "product_Quantity")
-//    private Integer quantity;
-
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderedProduct> orderedProducts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "soldProduct",cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SoldProduct> soldProducts=new ArrayList<>();
-
-//    @JsonIgnore
-//    @ManyToOne(targetEntity = Sale.class)
-//    @JoinColumn(name = "sale_id")
-//    private Sale sale;
+    @OneToMany(mappedBy = "soldProduct", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SoldProduct> soldProducts = new ArrayList<>();
 
     public void addOrderedProduct(OrderedProduct orderedProduct) {
         orderedProducts.add(orderedProduct);
@@ -66,13 +56,22 @@ public class Product {
         orderedProducts.remove(orderedProduct);
         orderedProduct.setProduct(null);
     }
-    public void addSoldProduct(SoldProduct soldProduct){
+
+    public void addSoldProduct(SoldProduct soldProduct) {
         soldProducts.add(soldProduct);
         soldProduct.setProduct(this);
     }
 
-    public void removeSoldProduct(SoldProduct soldProduct){
+    public void removeSoldProduct(SoldProduct soldProduct) {
         soldProducts.remove(soldProduct);
         soldProduct.setProduct(null);
+    }
+
+    public Product(String productName, String productCategory, Double productPrice, String productManufacturedBy, Timestamp createdAt) {
+        this.productName = productName;
+        this.productCategory = productCategory;
+        this.productPrice = productPrice;
+        this.productManufacturedBy = productManufacturedBy;
+        this.createdAt = createdAt;
     }
 }

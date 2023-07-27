@@ -2,7 +2,9 @@ package com.example.demo.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "t_sale")
 public class Sale {
 
@@ -37,12 +41,10 @@ public class Sale {
     @Column(name = "product_quantity")
     private Integer productQuantity;
 
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SoldProduct> soldProducts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "sale",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<SoldProduct> soldProducts=new ArrayList<>();
-
-
-    public void addSoldProduct(SoldProduct soldProduct){
+    public void addSoldProduct(SoldProduct soldProduct) {
         soldProducts.add(soldProduct);
         soldProduct.setSale(this);
     }
