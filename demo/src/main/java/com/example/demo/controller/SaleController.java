@@ -23,7 +23,7 @@ public class SaleController {
     // waiting for brother
 
 
-    private final Logger LOGGER= LogManager.getLogger("SaleControllerLogs"); // i want to make separate log file for this
+    private final Logger LOGGER = LogManager.getLogger("SaleControllerLogs"); // i want to make separate log file for this
 
     @Autowired
     SaleService saleService;
@@ -33,37 +33,37 @@ public class SaleController {
 
     @GetMapping(value = "/getSale/{saleId}")
     public String getTheSaleBySaleId(@PathVariable Integer saleId,
-                                     Model model){
-        Sale sale=saleService.findSaleById(saleId);
-        model.addAttribute("sale",sale);
+                                     Model model) {
+        Sale sale = saleService.findSaleById(saleId);
+        model.addAttribute("sale", sale);
         return "sale-details";
     }
 
     @GetMapping(value = "/sales")
-    public String getAllSales(Model model,Principal principal){
+    public String getAllSales(Model model, Principal principal) {
         User user = null;
         try {
             user = userService.findUserByEmail(principal.getName());
             if (user == null || user.getRole() == null) {
-                model.addAttribute("errorMessage","user not found");
+                model.addAttribute("errorMessage", "user not found");
                 return "error";
             }
         } catch (Exception exception) {
             LOGGER.error("Error at finding user: " + exception.getMessage());
-            model.addAttribute("errorMessage",exception.getMessage());
+            model.addAttribute("errorMessage", exception.getMessage());
             return "error";
         }
         Boolean adminFlag = user.getRole().isAdmin();
         model.addAttribute("isUserAdmin", adminFlag);
-        List<Sale> allSales=saleService.findAllSales();
-        model.addAttribute("allSales",allSales);
+        List<Sale> allSales = saleService.findAllSales();
+        model.addAttribute("allSales", allSales);
         return "show-all-sales";
     }
 
     @PostMapping(value = "/updateSale")
     public String update(Model model, Principal principal) throws Exception {
-        User user=userService.findUserByEmail(principal.getName());
-        model.addAttribute("user",user);
+        User user = userService.findUserByEmail(principal.getName());
+        model.addAttribute("user", user);
         return "update-sale-form";
     }
 }

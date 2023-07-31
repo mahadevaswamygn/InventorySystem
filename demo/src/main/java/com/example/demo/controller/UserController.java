@@ -167,7 +167,6 @@ public class UserController {
             if (user == null) {
                 return "update-user-form";
             }
-
             UserDto userDto = new UserDto();
             userDto.setUserName(user.getUserName());
             userDto.setUserEmail(user.getUserEmail());

@@ -72,7 +72,6 @@ public class ProductController {
                              BindingResult bindingResult,
                              Principal principal,
                              Model model) {
-
         if (bindingResult.hasErrors()) {
             return "product-registration-form";
         }
@@ -86,5 +85,4 @@ public class ProductController {
         }
         return "redirect:/get-all-products";
     }
-
 }
