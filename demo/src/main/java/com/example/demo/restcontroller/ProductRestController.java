@@ -98,4 +98,10 @@ public class ProductRestController {
         List<ProductInventoryDto> all=productService.getLatestInventory();
         return new ResponseEntity<>(all,HttpStatus.OK);
     }
+
+    @GetMapping(value = "/getInventoryOfTheProduct/{productId}")
+    public ResponseEntity<ProductInventoryDto> getLatestInventoryOfTheProduct(@PathVariable Integer productId) throws ProductNotFoundException {
+        ProductInventoryDto productInventoryDto=productService.getLatestInventoryOfTheProduct(productId);
+        return new ResponseEntity<>(productInventoryDto,HttpStatus.OK);
+    }
 }

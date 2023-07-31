@@ -28,7 +28,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(configure ->
                         configure
-                                .requestMatchers("/login", "/add-product", "/create-user", "/register", "/")
+                                .requestMatchers("/login", "/add-product", "/getLatestInventoryForEachProduct","/getInventoryOfTheProduct/{productId}","/create-user", "/register", "/")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )

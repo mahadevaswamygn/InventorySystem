@@ -7,6 +7,7 @@ import com.example.demo.dto.ProductRequest;
 import com.example.demo.entity.Inventory;
 import com.example.demo.entity.Product;
 import com.example.demo.reposotory.ProductRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,6 @@ public class ProductService {
             product.setProductManufacturedBy(productManufacturedBy);
         }
         product.setUpdatedAt(Timestamp.from(Instant.now()));
-
         try {
             productRepository.save(product);
         } catch (Exception exception) {
@@ -129,6 +129,11 @@ public class ProductService {
     public List<ProductInventoryDto> getLatestInventory() throws ProductNotFoundException {
         List<ProductInventoryDto> latestInventoryOfAllProducts = inventoryService.findLatestAvailableQuantityOfAllProducts();
         return latestInventoryOfAllProducts;
+    }
+
+    public ProductInventoryDto getLatestInventoryOfTheProduct(Integer productId) {
+        ProductInventoryDto productInventoryDto=inventoryService.findLatestAvailableQuantityOfTheProduct(productId);
+        return productInventoryDto;
     }
 
 //    public void updateProductQuantity(Product existingProduct, Integer saleProductQuantity) throws Exception {

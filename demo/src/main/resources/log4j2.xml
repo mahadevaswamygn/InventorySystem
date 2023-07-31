@@ -3,7 +3,6 @@
     <Properties>
         <property name="LOG_PATH" value="./logs"/>
     </Properties>
-
     <Appenders>
         <Console name="ConsoleOutput" target="SYSTEM_OUT">
             <PatternLayout>
@@ -119,7 +118,6 @@
             </Policies>
         </RollingFile>
     </Appenders>
-
     <Loggers>
         <Root level="info">
             <AppenderRef ref="ConsoleOutput"/>
@@ -129,35 +127,32 @@
             <appender-ref ref="LogFile"/>
             <appender-ref ref="ConsoleOutput"/>
         </logger>
-
         <Logger name="userControllerLogs" level="debug" additivity="false">
-            <AppenderRef ref="UserControllerAppender" />
+            <AppenderRef ref="UserControllerAppender"/>
         </Logger>
         <Logger name="ProductControllerLogs" level="debug" additivity="false">
-            <AppenderRef ref="ProductControllerAppender" />
+            <AppenderRef ref="ProductControllerAppender"/>
         </Logger>
         <Logger name="PurchaseControllerLogs" level="debug" additivity="false">
-            <AppenderRef ref="PurchaseControllerAppender" />
+            <AppenderRef ref="PurchaseControllerAppender"/>
         </Logger>
         <Logger name="OrderedProductControllerLogs" level="debug" additivity="false">
-            <AppenderRef ref="OrderedProductControllerAppender" />
+            <AppenderRef ref="OrderedProductControllerAppender"/>
         </Logger>
         <Logger name="OrderedProductRestControllerLogs" level="debug" additivity="false">
-            <AppenderRef ref="OrderedProductRestControllerAppender" />
+            <AppenderRef ref="OrderedProductRestControllerAppender"/>
         </Logger>
         <Logger name="ProductRestControllerLogs" level="debug" additivity="false">
-            <AppenderRef ref="ProductRestControllerAppender" />
+            <AppenderRef ref="ProductRestControllerAppender"/>
         </Logger>
         <Logger name="SaleRestControllerLogs" level="debug" additivity="false">
-            <AppenderRef ref="SaleRestControllerAppender" />
+            <AppenderRef ref="SaleRestControllerAppender"/>
         </Logger>
         <Logger name="SaleControllerLogs" level="debug" additivity="false">
-            <AppenderRef ref="SaleControllerAppender" />
+            <AppenderRef ref="SaleControllerAppender"/>
         </Logger>
         <Logger name="InventoryServiceLogs" level="debug" additivity="false">
-            <AppenderRef ref="InventoryServiceAppender" />
+            <AppenderRef ref="InventoryServiceAppender"/>
         </Logger>
-
     </Loggers>
-
 </Configuration>

@@ -64,6 +64,5 @@ public class OrderService {
 
     private String generateInvoiceNumber() {
         return UUID.randomUUID().toString().replace("-", "").toUpperCase();
-
     }
 }

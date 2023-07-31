@@ -1,0 +1,1 @@
+2023-07-31 11:53:10 [http-nio-8081-exec-1] ERROR : error at finding the userCannot invoke "java.security.Principal.getName()" because "principal" is null

@@ -35,7 +35,7 @@ public class InventoryService {
     InventoryRepository inventoryRepository;
 
     private final Logger LOGGER = LogManager.getLogger("InventoryServiceLogs");
-    
+
     public void updateInventory(List<OrderedProduct> orderedProducts) {
 
         for (OrderedProduct orderedProduct : orderedProducts) {
@@ -98,5 +98,11 @@ public class InventoryService {
             latestInventoryOfAllProducts.add(productInventoryDto);
         }
         return latestInventoryOfAllProducts;
+    }
+
+    public ProductInventoryDto findLatestAvailableQuantityOfTheProduct(Integer productId) {
+        Inventory inventory=findExistingInventoryOfTheProduct(productId);
+        ProductInventoryDto productInventoryDto=new ProductInventoryDto(inventory.getProduct().getId(),inventory.getProduct().getProductName(), inventory.getAvailableProductQuantity());
+        return productInventoryDto;
     }
 }

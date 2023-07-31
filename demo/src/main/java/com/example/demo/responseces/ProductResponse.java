@@ -10,5 +10,5 @@ import org.hibernate.resource.transaction.spi.DdlTransactionIsolator;
 @AllArgsConstructor
 public class ProductResponse {
     private String massage;
-    private String statusCode;
+    private String status;
 }
